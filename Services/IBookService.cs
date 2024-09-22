@@ -5,7 +5,7 @@ namespace LibraryAPI.Services
 {
     public interface IBookService
     {
-        Task<Book> CreateBookAsync(CreateBookDto bookDto);
+        Task<Book> CreateBookAsync(BookDto bookDto);
         Task<IEnumerable<Book>> GetAllBooksAsync();
     }
 }

@@ -6,5 +6,6 @@ namespace LibraryAPI.Dtos
         public string Title { get; set; }
         public DateTime PublishedDate { get; set; }
         public string AuthorFullName { get; set; }
+        public int AuthorId { get; set; }
     }
 }

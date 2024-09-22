@@ -6,6 +6,6 @@ namespace LibraryAPI.Services
     public interface IAuthorService
     {
         Task<IEnumerable<Author>> GetAllAuthorsAsync();
-        Task<Author> CreateAuthorAsync(CreateAuthorDto authorDto);
+        Task<Author> CreateAuthorAsync(AuthorDto authorDto);
     }
 }

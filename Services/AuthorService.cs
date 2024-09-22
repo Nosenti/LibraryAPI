@@ -1,24 +1,24 @@
-using LibraryAPI.Data;
 using LibraryAPI.Dtos;
 using LibraryAPI.Entities;
-using Microsoft.EntityFrameworkCore;
+using LibraryAPI.Repositories;
 
 namespace LibraryAPI.Services
 {
     public class AuthorService : IAuthorService
     {
-        private readonly BookLibraryContext _context;
-        public AuthorService(BookLibraryContext context)
+        private readonly IAuthorRepository _authorRepository;
+
+        public AuthorService(IAuthorRepository authorRepository)
         {
-            _context = context;
+            _authorRepository = authorRepository;
         }
 
         public async Task<IEnumerable<Author>> GetAllAuthorsAsync()
         {
-            return await _context.Authors.ToListAsync();
+            return await _authorRepository.GetAllAuthorsAsync();
         }
 
-        public async Task<Author> CreateAuthorAsync(CreateAuthorDto authorDto)
+        public async Task<Author> CreateAuthorAsync(AuthorDto authorDto)
         {
             var newAuthor = new Author
             {
@@ -26,9 +26,7 @@ namespace LibraryAPI.Services
                 LastName = authorDto.LastName,
             };
 
-            _context.Authors.Add(newAuthor);
-            await _context.SaveChangesAsync();
-            return newAuthor;
+            return await _authorRepository.AddAuthorAsync(newAuthor);
         }
     }
 }

@@ -1,4 +1,5 @@
 using LibraryAPI.Data;
+using LibraryAPI.Repositories;
 using LibraryAPI.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +13,8 @@ builder.Services.AddControllers();
 // Register IBookService and IAuthorService
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IAuthorService, AuthorService>();
+builder.Services.AddScoped<IBookRepository, BookRepository>();
+builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
 
 // Adding Swagger Documentation
 builder.Services.AddEndpointsApiExplorer();

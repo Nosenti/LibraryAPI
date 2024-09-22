@@ -1,26 +1,25 @@
-using LibraryAPI.Data;
 using LibraryAPI.Dtos;
 using LibraryAPI.Entities;
-using Microsoft.EntityFrameworkCore;
+using LibraryAPI.Repositories;
 
 namespace LibraryAPI.Services
 {
     public class BookService : IBookService
     {
-        private readonly BookLibraryContext _context;
+        private readonly IBookRepository _bookRepository;
 
-        public BookService(BookLibraryContext context)
+        public BookService(IBookRepository bookRepository)
         {
-            _context = context;
+            _bookRepository = bookRepository;
         }
 
         public async Task<IEnumerable<Book>> GetAllBooksAsync()
         {
-            return await _context.Books.Include(b => b.Author).ToListAsync();
+            return await _bookRepository.GetAllBooksAsync();
         }
-        public async Task<Book> CreateBookAsync(CreateBookDto bookDto)
+        public async Task<Book> CreateBookAsync(BookDto bookDto)
         {
-            var author = await _context.Authors.FindAsync(bookDto.AuthorId);
+            var author = await _bookRepository.GetAuthorByIdAsync(bookDto.AuthorId);
             if (author == null)
             {
                 throw new Exception("Author not found");
@@ -33,9 +32,7 @@ namespace LibraryAPI.Services
                 AuthorId = bookDto.AuthorId,
             };
 
-            _context.Books.Add(newBook);
-            await _context.SaveChangesAsync();
-            return newBook;
+            return await _bookRepository.AddBookAsync(newBook);
         }
     }
 }

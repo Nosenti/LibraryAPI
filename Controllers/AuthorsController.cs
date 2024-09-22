@@ -17,7 +17,7 @@ namespace LibraryAPI.Controllers
             _authorService = authorService;
         }
         [HttpPost]
-        public async Task<ActionResult<Author>> CreateAuthor(CreateAuthorDto createAuthorDto)
+        public async Task<ActionResult<Author>> CreateAuthor(AuthorDto createAuthorDto)
         {
             try
             {

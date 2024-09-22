@@ -18,11 +18,11 @@ namespace LibraryAPI.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Book>> CreateBook(CreateBookDto createBookDto)
+        public async Task<ActionResult<Book>> CreateBook(BookDto bookDto)
         {
             try
             {
-                var newBook = await _bookService.CreateBookAsync(createBookDto);
+                var newBook = await _bookService.CreateBookAsync(bookDto);
                 return CreatedAtAction(nameof(CreateBook), new { id = newBook.Id }, newBook);
             }
             catch (Exception ex)
