@@ -20,38 +20,24 @@ namespace LibraryAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Book>> CreateBook(BookDto bookDto)
         {
-            try
-            {
-                var newBook = await _bookService.CreateBookAsync(bookDto);
-                return CreatedAtAction(nameof(CreateBook), new { id = newBook.Id }, newBook);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var newBook = await _bookService.CreateBookAsync(bookDto);
+            return CreatedAtAction(nameof(CreateBook), new { id = newBook.Id }, newBook);
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BookDto>>> GetBooks()
         {
-            try
-            {
-                var books = await _bookService.GetAllBooksAsync();
+            var books = await _bookService.GetAllBooksAsync();
 
-                var booksDto = books.Select(book => new BookDto
-                {
-                    Id = book.Id,
-                    Title = book.Title,
-                    PublishedDate = book.PublishedDate,
-                    AuthorFullName = $"{book.Author.FirstName} {book.Author.LastName}"
-                }).ToList();
-
-                return Ok(booksDto);
-            }
-            catch (Exception ex)
+            var booksDto = books.Select(book => new BookDto
             {
-                return BadRequest(ex.Message);
-            }
+                Id = book.Id,
+                Title = book.Title,
+                PublishedDate = book.PublishedDate,
+                AuthorFullName = $"{book.Author.FirstName} {book.Author.LastName}"
+            }).ToList();
+
+            return Ok(booksDto);
         }
     }
 }

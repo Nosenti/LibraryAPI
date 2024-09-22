@@ -1,4 +1,5 @@
 using LibraryAPI.Data;
+using LibraryAPI.Middlewares;
 using LibraryAPI.Repositories;
 using LibraryAPI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,8 @@ builder.Services.AddDbContext<BookLibraryContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddControllers();
+builder.Services.AddExceptionHandler<AppExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 // Register IBookService and IAuthorService
 builder.Services.AddScoped<IBookService, BookService>();
@@ -28,6 +31,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseExceptionHandler(_ => { });
 
 app.MapControllers();
 

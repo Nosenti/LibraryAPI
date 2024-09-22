@@ -2,7 +2,6 @@ using LibraryAPI.Dtos;
 using LibraryAPI.Entities;
 using LibraryAPI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace LibraryAPI.Controllers
 {
@@ -17,42 +16,24 @@ namespace LibraryAPI.Controllers
             _authorService = authorService;
         }
         [HttpPost]
-        public async Task<ActionResult<Author>> CreateAuthor(AuthorDto createAuthorDto)
+        public async Task<ActionResult<Author>> CreateAuthor(AuthorDto authorDto)
         {
-            try
-            {
-                var newAuthor = await _authorService.CreateAuthorAsync(createAuthorDto);
-                return CreatedAtAction(nameof(CreateAuthor), new { id = newAuthor.Id }, newAuthor);
-            }
-            catch (DbUpdateException dbEx)
-            {
-                return BadRequest(dbEx.InnerException?.Message ?? dbEx.Message);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var newAuthor = await _authorService.CreateAuthorAsync(authorDto);
+            return CreatedAtAction(nameof(CreateAuthor), new { id = newAuthor.Id }, newAuthor);
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AuthorDto>>> GetAllAuthors()
         {
-            try
+            var authors = await _authorService.GetAllAuthorsAsync();
+            var authorDto = authors.Select(author => new AuthorDto
             {
-                var authors = await _authorService.GetAllAuthorsAsync();
-                var authorDto = authors.Select(author => new AuthorDto
-                {
-                    Id = author.Id,
-                    FirstName = author.FirstName,
-                    LastName = author.LastName
-                }).ToList();
+                Id = author.Id,
+                FirstName = author.FirstName,
+                LastName = author.LastName
+            }).ToList();
 
-                return Ok(authorDto);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return Ok(authorDto);
         }
     }
 }
